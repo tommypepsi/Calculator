@@ -1,35 +1,50 @@
+// the calculate function will take a mathematical operation as a string and parse it to get the answer
 function calculate(str){
+  //we use regex to find mathematical expressions in order of operation priority
   var parenthesis = /(.+)?\(([^\)]+)\)(.+)?/.exec(str)
   var exponent = /((?:-?\d+(?:\.\d+)?(?:\+|-|\*|\/))*)(-?\d+(?:\.\d+)?)(\^)(-?\d+(?:\.\d+)?)(.+)?/.exec(str)
   var divMul = /((?:-?\d+(?:\.\d+)?(?:\+|-|\*|\/))*)(-?\d+(?:\.\d+)?)(\*|\/)(-?\d+(?:\.\d+)?)(.+)?/.exec(str)
   var addSubs = /(-?\d+(?:\.\d+)?)(-|\+)(-?\d+(?:\.\d+)?)(.+)?/.exec(str)
   console.log(str)
 
+  //if everything returns null it means the operation is complete or that it isn't a valid mathematical
+  //operation, so we return the result
   if(divMul === null && addSubs === null && parenthesis === null && exponent === null){
     return str
   }
   else{
+    //if there's a match with the parenthesis expression
     if(parenthesis){
       console.log(parenthesis)
       console.log("()")
+      //if there's a match for something before and after the parenthesis
       if(parenthesis[1] && parenthesis[3]){
+        //we create a new operation string with what is before and after the parenthesis
+        //and the answer of what's inside the parenthesis and recursively call calculate to get
+        //the answer of this new operation
         return calculate(parenthesis[1] + calculate(parenthesis[2]) + parenthesis[3])
       }
+      //if there's only something before the parenthesis
       else if(parenthesis[1]){
         return calculate(parenthesis[1] + calculate(parenthesis[2]))
       }
       else if(parenthesis[3]){
         return calculate(calculate(parenthesis[2]) + parenthesis[3])
       }
+      //if there's nothing before or afther the parenthesis
       else{
+        //we just calculate what's inside the parenthesis
         return calculate(parenthesis[2])
       }
     }
+    //if there's a match for and exponent
     else if(exponent){
       console.log(exponent)
       console.log("^")
+      //we get the result
       var result = Math.pow(parseFloat(exponent[2]), parseFloat(exponent[4]))
 
+      //and create a new operation with what's before and after;
       if(exponent[5] && exponent[1]){
         return calculate(exponent[1] + result.toString() + exponent[5]);
       }
@@ -113,6 +128,7 @@ window.onkeyup = function(key){
   else{
     var keycode = key.keyCode;
   }
+  //when we press enter we calculate the answer
   if(keycode == 13){
     document.getElementById("currentNumber").innerHTML = calculate(document.getElementById("fullOperation").innerHTML);
     document.getElementById("fullOperation").innerHTML = calculate(document.getElementById("fullOperation").innerHTML);
@@ -120,16 +136,20 @@ window.onkeyup = function(key){
     document.getElementById("keyboard").value = "";
     inputEmpty = true;
   }
+  //when we press esc. we reset the operation
   if(keycode == 27){
     document.getElementById("currentNumber").innerHTML = "";
     document.getElementById("fullOperation").innerHTML = "";
   }
 }
 window.onkeydown = function(key){
+  //we use the last character added in an hidden iput to make the operation.
+  //when we press backspace the last character added are previous numbers so we need to deactivate it
   if(key.keyCode == 8){
     return false;
   }
 }
+//the operation function verify if the character to add is valid and add it to the operation
 function operation(character){
   if(parseFloat(character) >= 0 && parseFloat(character) < 10 || character == "."){
     if(inputEmpty){
@@ -182,6 +202,7 @@ function operation(character){
     document.getElementById("fullOperation").innerHTML += ")";
     document.getElementById("fullOperation").style.display = "block";
   }
+  //if the character is "=" we get the answer
   if(character == "="){
     document.getElementById("currentNumber").innerHTML = calculate(document.getElementById("fullOperation").innerHTML);
     document.getElementById("fullOperation").innerHTML = calculate(document.getElementById("fullOperation").innerHTML);
@@ -190,17 +211,22 @@ function operation(character){
     inputEmpty = true;
   }
 }
+//the input function is called everytime there's something new in the hidden input
 function input(){
+  //we take the last character typed in the input
   var string = document.getElementById("keyboard").value;
+  //and see if it's a valid character to add to the operation
   operation(string[string.length - 1])
-
 }
 
 window.onload = function(){
+  //every buttons
   var options = document.getElementsByClassName("options");
 
+  //for every buttons
   for(var i = 0; i < options.length; i++){
     options[i].onclick = function(){
+      //we add it to the operation on click
       operation(this.innerHTML);
     }
   }
