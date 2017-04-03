@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <script src="js/script.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div id="calcDisplay">
+      <div id="currentNumber"></div>
+      <div id="fullOperation"></div>
+    </div>
+    <div id="calcBody">
+      <div id="topOptions">
+        <div class="options">(</div>
+        <div class="options">)</div>
+        <div class="options">^</div>
+        <div class="options">/</div>
+        <div class="options">*</div>
+      </div>
+      <div id="keypad">
+        <div class="options">9</div>
+        <div class="options">8</div>
+        <div class="options">7</div>
+        <div class="options">6</div>
+        <div class="options">5</div>
+        <div class="options">4</div>
+        <div class="options">3</div>
+        <div class="options">2</div>
+        <div class="options">1</div>
+        <div class="options">0</div>
+        <div class="options">.</div>
+      </div>
+      <div id="sideOptions">
+        <div class="options">-</div>
+        <div class="options">+</div>
+        <div class="options">=</div>
+      </div>
+    </div>
+    <input id="keyboard" onblur="this.focus()" oninput="input()" autofocus>
+  </body>
+</html>
