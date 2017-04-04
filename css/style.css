@@ -33,7 +33,7 @@ html,body{
   margin-right: 50px;
   padding-left: 5vw;
   padding-right: 5vw;
-  background-color: rgb(34, 34, 34);
+  background-color: rgb(18,18,18);
   border-radius: 20px;
   box-shadow: inset 0px -10px 40px #000000, inset 0px -10px 50px #000000;
   display: flex;
@@ -45,7 +45,7 @@ html,body{
   font-size: 20px;
   color: rgb(85, 217, 202);
   text-shadow: 0 0 30px rgb(0, 255, 240);
-  background-color: rgb(26, 26, 26);
+  background-color: rgb(15,15,15);
   border-radius: 10px;
   margin: 1vh;
   box-shadow: 2px 4px #000;
