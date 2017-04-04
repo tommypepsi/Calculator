@@ -120,7 +120,7 @@ function calculate(str){
   }
 }
 
-var inputEmpty = false;
+var inputEmpty = true;
 window.onkeyup = function(key){
   if(key.keyCode < 106 && key.keyCode > 95){
     var keycode = key.keyCode - 48;
@@ -132,14 +132,14 @@ window.onkeyup = function(key){
   if(keycode == 13){
     document.getElementById("currentNumber").innerHTML = calculate(document.getElementById("fullOperation").innerHTML);
     document.getElementById("fullOperation").innerHTML = calculate(document.getElementById("fullOperation").innerHTML);
-    document.getElementById("fullOperation").style.display = "none";
+    document.getElementById("fullOperation").style.opacity = "0";
     document.getElementById("keyboard").value = "";
     inputEmpty = true;
   }
   //when we press esc. we reset the operation
   if(keycode == 27){
-    document.getElementById("currentNumber").innerHTML = "";
-    document.getElementById("fullOperation").innerHTML = "";
+    document.getElementById("currentNumber").innerHTML = "0";
+    document.getElementById("fullOperation").innerHTML = "0";
   }
 }
 window.onkeydown = function(key){
@@ -151,64 +151,113 @@ window.onkeydown = function(key){
 }
 //the operation function verify if the character to add is valid and add it to the operation
 function operation(character){
+  var fullOperation = document.getElementById("fullOperation");
   if(parseFloat(character) >= 0 && parseFloat(character) < 10 || character == "."){
     if(inputEmpty){
       document.getElementById("currentNumber").innerHTML = "";
       document.getElementById("fullOperation").innerHTML = "";
     }
     inputEmpty = false;
-    document.getElementById("currentNumber").innerHTML += character;
-    document.getElementById("fullOperation").innerHTML += character;
+    if(document.getElementById("fullOperation").innerHTML == "0"){
+      document.getElementById("currentNumber").innerHTML = character;
+      document.getElementById("fullOperation").innerHTML = character;
+    }
+    else if(document.getElementById("fullOperation").innerHTML == "-"){
+      document.getElementById("currentNumber").innerHTML = character;
+      document.getElementById("fullOperation").innerHTML += character;
+    }
+    else if(document.getElementById("currentNumber").innerHTML == "0"){
+      document.getElementById("currentNumber").innerHTML = character;
+      document.getElementById("fullOperation").innerHTML += character;
+    }
+    else{
+      document.getElementById("currentNumber").innerHTML += character;
+      document.getElementById("fullOperation").innerHTML += character;
+    }
+
   }
   if(character == "+"){
+    if(/(-|\+|\*|\/|\^)$/.test(document.getElementById("fullOperation").innerHTML)){
+      document.getElementById("fullOperation").innerHTML = fullOperation.innerHTML.slice(0, -1);
+    }
     inputEmpty = false;
-    document.getElementById("currentNumber").innerHTML = "";
-    document.getElementById("fullOperation").innerHTML += "+";
-    document.getElementById("fullOperation").style.display = "block";
+    if(document.getElementById("fullOperation").innerHTML != "0"){
+      document.getElementById("currentNumber").innerHTML = "0";
+      document.getElementById("fullOperation").innerHTML += "+";
+      document.getElementById("fullOperation").style.opacity = "1";
+    }
   }
   if(character == "-"){
+    if(/(-|\+|\*|\/|\^)$/.test(document.getElementById("fullOperation").innerHTML)){
+      document.getElementById("fullOperation").innerHTML = fullOperation.innerHTML.slice(0, -1);
+    }
     inputEmpty = false;
-    document.getElementById("currentNumber").innerHTML = "";
-    document.getElementById("fullOperation").innerHTML += "-";
-    document.getElementById("fullOperation").style.display = "block";
+    if(document.getElementById("fullOperation").innerHTML == "0"){
+      document.getElementById("currentNumber").innerHTML = "0";
+      document.getElementById("fullOperation").innerHTML = "-";
+      document.getElementById("fullOperation").style.opacity = "1";
+    }
+    else{
+      document.getElementById("currentNumber").innerHTML = "0";
+      document.getElementById("fullOperation").innerHTML += "-";
+      document.getElementById("fullOperation").style.opacity = "1";
+    }
   }
   if(character == "*"){
+    if(/(-|\+|\*|\/|\^)$/.test(document.getElementById("fullOperation").innerHTML)){
+      document.getElementById("fullOperation").innerHTML = fullOperation.innerHTML.slice(0, -1);
+    }
     inputEmpty = false;
-    document.getElementById("currentNumber").innerHTML = "";
+    document.getElementById("currentNumber").innerHTML = "0";
     document.getElementById("fullOperation").innerHTML += "*";
-    document.getElementById("fullOperation").style.display = "block";
+    document.getElementById("fullOperation").style.opacity = "1";
   }
   if(character == "/"){
+    if(/(-|\+|\*|\/|\^)$/.test(document.getElementById("fullOperation").innerHTML)){
+      document.getElementById("fullOperation").innerHTML = fullOperation.innerHTML.slice(0, -1);
+    }
     inputEmpty = false;
-    document.getElementById("currentNumber").innerHTML = "";
+    document.getElementById("currentNumber").innerHTML = "0";
     document.getElementById("fullOperation").innerHTML += "/";
-    document.getElementById("fullOperation").style.display = "block";
+    document.getElementById("fullOperation").style.opacity = "1";
   }
   if(character == "^"){
+    if(/(-|\+|\*|\/|\^)$/.test(document.getElementById("fullOperation").innerHTML)){
+      document.getElementById("fullOperation").innerHTML = fullOperation.innerHTML.slice(0, -1);
+    }
     inputEmpty = false;
-    document.getElementById("currentNumber").innerHTML = "";
+    document.getElementById("currentNumber").innerHTML = "0";
     document.getElementById("fullOperation").innerHTML += "^";
-    document.getElementById("fullOperation").style.display = "block";
+    document.getElementById("fullOperation").style.opacity = "1";
   }
   if(character == "("){
     inputEmpty = false;
-    document.getElementById("currentNumber").innerHTML = "";
+    document.getElementById("currentNumber").innerHTML = "0";
     document.getElementById("fullOperation").innerHTML += "(";
-    document.getElementById("fullOperation").style.display = "block";
+    document.getElementById("fullOperation").style.opacity = "1";
   }
   if(character == ")"){
     inputEmpty = false;
-    document.getElementById("currentNumber").innerHTML = "";
+    document.getElementById("currentNumber").innerHTML = "0";
     document.getElementById("fullOperation").innerHTML += ")";
-    document.getElementById("fullOperation").style.display = "block";
+    document.getElementById("fullOperation").style.opacity = "1";
   }
   //if the character is "=" we get the answer
   if(character == "="){
     document.getElementById("currentNumber").innerHTML = calculate(document.getElementById("fullOperation").innerHTML);
     document.getElementById("fullOperation").innerHTML = calculate(document.getElementById("fullOperation").innerHTML);
-    document.getElementById("fullOperation").style.display = "none";
+    document.getElementById("fullOperation").style.opacity = "0";
     document.getElementById("keyboard").value = "";
     inputEmpty = true;
+  }
+  if(character == "CE"){
+    var regex = new RegExp(document.getElementById("currentNumber").innerHTML + "$")
+    document.getElementById("fullOperation").innerHTML = document.getElementById("fullOperation").innerHTML.replace(regex, "")
+    document.getElementById("currentNumber").innerHTML = "0";
+  }
+  if(character == "C"){
+    document.getElementById("currentNumber").innerHTML = "0";
+    document.getElementById("fullOperation").innerHTML = "0";
   }
 }
 //the input function is called everytime there's something new in the hidden input
